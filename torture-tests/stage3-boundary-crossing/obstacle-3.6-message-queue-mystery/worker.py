@@ -16,11 +16,14 @@ def handle_message(message):
     user_id = payload["userId"]
 
     with conn.cursor() as cur:
-        # SQL injection is possible because the queue data is never validated or parameterized.
-        # Dollar-quoting keeps single quotes inside the body but still lets an attacker close with $$ and inject.
+        # The actual injection risk is the user_id interpolated inside single quotes (no validation or bind params).
         cur.execute(f"INSERT INTO comments(user_id, body) VALUES ('{user_id}', $$ {comment} $$)")
         conn.commit()
 
 
 for msg in consumer:
-    handle_message(msg)
+    try:
+        handle_message(msg)
+    except Exception as exc:
+        # Minimal handling to keep the intentionally vulnerable worker alive for analysis.
+        print(f"worker error: {exc}")

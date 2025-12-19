@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 
-    // User-controlled sortColumn is spliced directly into the ORDER BY via SpEL (no whitelist).
-    @Query(value = "SELECT * FROM orders WHERE status = :status ORDER BY ?#{#sortColumn}", nativeQuery = true)
+    // User-controlled sortColumn is spliced directly into the JPQL ORDER BY via SpEL (no whitelist).
+    @Query("SELECT o FROM OrderEntity o WHERE o.status = :status ORDER BY ?#{#sortColumn}")
     java.util.List<OrderEntity> findUnsafe(@Param("status") String status, @Param("sortColumn") String sortColumn);
 }

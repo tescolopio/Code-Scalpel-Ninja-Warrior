@@ -44,5 +44,5 @@ app.use(
 )
 
 app.listen(4000, () => {
-  console.log('GraphQL gateway running on port 4000')
+  console.log('GraphQL torture-test gateway running on port 4000 (INTENTIONALLY INSECURE - DO NOT USE IN PRODUCTION)')
 })
