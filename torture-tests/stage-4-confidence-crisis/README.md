@@ -1,6 +1,6 @@
 # Stage 4: The Confidence Crisis
 
-Uncertainty quantification torture tests for Code Scalpel, built from the *Code Scalpel Ninja Warrior* specification. Each obstacle is isolated in its own folder with:
+Uncertainty quantification torture tests for Code Scalpel, built from an internal Code Scalpel specification. Each obstacle is isolated in its own folder with:
 
 - Minimal code samples that exercise the obstacle
 - Ground-truth or ambiguity expectations

@@ -8,7 +8,7 @@ def delta(conn, user_input: str):
 
 def charlie(conn, payload: dict):
     # Passes untrusted payload field directly into delta.
-    return delta(conn, payload["actor"])
+    return delta(conn, payload.get("actor", ""))
 
 
 def bravo(conn, payload: dict):

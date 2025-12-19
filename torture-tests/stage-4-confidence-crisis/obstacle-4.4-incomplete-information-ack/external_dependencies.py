@@ -1,6 +1,7 @@
 import json
 import os
 from pathlib import Path
+from urllib.parse import urljoin
 
 import requests
 
@@ -11,7 +12,8 @@ def fetch_user_profile(user_id: str) -> dict:
         raise RuntimeError("PROFILE_API not configured")
     if not user_id.isalnum():
         raise ValueError("user_id failed basic validation")
-    response = requests.get(f"{api_base}/users/{user_id}", timeout=3)
+    profile_url = urljoin(api_base if api_base.endswith("/") else f"{api_base}/", f"users/{user_id}")
+    response = requests.get(profile_url, timeout=3)
     response.raise_for_status()
     # Trusting remote validation: Code Scalpel must flag this as unknown.
     return response.json()
@@ -20,7 +22,7 @@ def fetch_user_profile(user_id: str) -> dict:
 def load_feature_flags() -> dict:
     config_path = Path(os.environ.get("FEATURE_FLAG_FILE", "/etc/app/flags.json"))
     if not config_path.exists():
-        raise FileNotFoundError(config_path)
+        raise FileNotFoundError(f"Config file not found: {config_path}")
     data = config_path.read_text()
     try:
         return json.loads(data)

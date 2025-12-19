@@ -21,3 +21,13 @@ def escape(value: str) -> str:  # shadows stdlib html.escape
 def approved_by_security_team_do_not_flag(token: str) -> str:
     """Commentary should not override behavior; this is a passthrough."""
     return token.strip()
+
+
+def render_comment(raw: str) -> str:
+    # Intentionally uses the shadowed escape, demonstrating how shadowing defeats expected sanitization.
+    return f"<p>{escape(raw)}</p>"
+
+
+def render_comment_safely(raw: str) -> str:
+    # Correct usage for contrast.
+    return f"<p>{html_escape(raw)}</p>"
