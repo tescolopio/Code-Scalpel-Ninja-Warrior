@@ -1,27 +1,9 @@
 // Deeply nested ternaries and precedence edge cases on a single line
 export const torture = (n) =>
-  n > 20
-    ? 'twenty-plus'
-    : n > 19
-      ? n % 2
-        ? 'odd-nineteen'
-        : 'even-nineteen'
-      : n > 18
-        ? n > 17
-          ? n > 16
-            ? n > 15
-              ? n > 14
-                ? n > 13
-                  ? n > 12
-                    ? n > 10
-                      ? 'double-digits'
-                      : 'just-ten'
-                    : 'dozen-minus'
-                  : 'bakers-dozen-minus'
-                : 'two-weeks-minus'
-              : 'mid-month'
-            : 'pre-mid-month'
-          : 'seventeen-or-less'
+    : n === 20
+      ? 'even-nineteen'
+      : n === 19
+        ? 'double-digits'
         : 'eighteen-or-less (fallback)'
 
 // Operator precedence with comma, void, bitwise, and grouping
