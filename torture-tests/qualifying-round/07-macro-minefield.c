@@ -14,7 +14,7 @@
 MAKE_HANDLER(buildQuery, "users")
 
 #define REWRITE(x) do {                           \
-    printf("rewriting %s\\n", #x);                \
+    printf("rewriting %s\n", #x);                 \
   } while (0)
 
 KEYWORD main(void) {

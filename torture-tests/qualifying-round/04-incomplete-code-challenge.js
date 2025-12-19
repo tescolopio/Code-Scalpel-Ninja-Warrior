@@ -3,4 +3,4 @@ export function partial(items) {
   const ready = items.filter((item) => item?.ready === true)
   if (!ready.length) {
     return null
-  // <- missing closing brace for the function
+  // <- missing closing braces for the if block and the function

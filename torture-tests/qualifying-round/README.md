@@ -1,4 +1,4 @@
-# Stage 1 – The Qualifying Round (Parser & AST Fundamentals)
+# Stage 1 - The Qualifying Round (Parser & AST Fundamentals)
 
 This directory contains self-contained torture tests for the first stage of the **Code Scalpel Ninja Warrior** suite. Each file exercises one of the eight Qualifying Round obstacles so parsers and AST builders can be validated without needing the rest of the monorepo.
 
