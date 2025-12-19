@@ -1,4 +1,12 @@
 {
+  "_comment": "OBSTACLE 3.2: Schema v2 payload - consumer only understands v1!",
+  "_intentional_drift": [
+    "totalCents is STRING not number (consumer will coerce)",
+    "currency field is NEW - consumer ignores",
+    "lineItems array is NEW - consumer ignores", 
+    "shipping object is NEW - consumer ignores",
+    "version field is NEW - consumer ignores"
+  ],
   "orderId": "ORD-9921",
   "totalCents": "1899",
   "currency": "USD",

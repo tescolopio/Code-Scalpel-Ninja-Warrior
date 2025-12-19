@@ -1,15 +1,58 @@
 """
-Obstacle 5.7: Change Budget Exhaustion
+=============================================================================
+OBSTACLE 5.7: CHANGE BUDGET EXHAUSTION
+=============================================================================
 
+PURPOSE: Test detection of dangerous changes hidden among benign "noise".
 This file mixes many filler changes (claiming to be auto-generated) with a
-hidden behavioral change: the introduction of os.system. A policy engine should
-count all modifications toward the budget and still flag the dangerous addition.
+hidden behavioral change: the introduction of os.system. Policy engines should
+count ALL modifications toward the budget and still flag the dangerous addition.
+
+INTENTIONAL OBFUSCATION PATTERNS (DO NOT SIMPLIFY):
+
+1. Fake Auto-Generated Markers (line 43-54):
+   - AUTO_GENERATED_LINES array claims "refactor" changes
+   - These look like harmless code cleanup
+   - May cause tools to skip detailed analysis
+   - "Auto-generated" should NOT mean "trusted"
+
+2. Harmless Helper Functions (line 57-68):
+   - helper_one(), helper_two(), helper_three()
+   - Trivial string transformations
+   - Padding to exhaust change budget
+   - Make the dangerous change seem small by comparison
+
+3. Hidden os.system() Introduction (line 72-74):
+   - execute_command() wraps os.system()
+   - This is CRITICAL - arbitrary command execution!
+   - Hidden among the noise of filler changes
+   - MUST be caught despite budget exhaustion
+
+4. Obfuscated Execution Path (line 77-79):
+   - process_and_execute() chains through helpers
+   - command -> helper_one -> helper_two -> helper_three -> os.system
+   - Transformation doesn't sanitize - just obfuscates
+
+EXPECTED BEHAVIOR (PASS):
+- Count ALL changes toward modification budget
+- NOT skip "auto-generated" code from analysis
+- Detect os.system() as CRITICAL regardless of surrounding noise
+- Track command through helper chain
+- Flag the dangerous addition despite filler
+
+FAILURE MODE (ELIMINATION):
+- Trusting "auto-generated" markers
+- Exhausting budget on filler, missing os.system()
+- Only analyzing a sample of changes
+- Missing the hidden dangerous function
+=============================================================================
 """
 
 import os
 from typing import Iterable
 
-# --- filler changes that often get miscounted as "auto-generated" -------------
+# --- INTENTIONAL: Filler changes that often get miscounted as "auto-generated" ---
+# These look harmless but are designed to exhaust analysis budgets
 AUTO_GENERATED_LINES: Iterable[str] = [
     "refactor: code format sweep",
     "refactor: auto-generated logging shims",
@@ -25,23 +68,28 @@ AUTO_GENERATED_LINES: Iterable[str] = [
 
 
 def helper_one(data: str) -> str:
+    """FILLER: Harmless string transformation."""
     return data.upper()
 
 
 def helper_two(data: str) -> str:
+    """FILLER: Harmless string transformation."""
     return data.lower()
 
 
 def helper_three(data: str) -> str:
+    """FILLER: Harmless string transformation."""
     return data[::-1]
 
 
-# --- hidden functional change introduced among the noise ---------------------
+# --- CRITICAL: Hidden functional change introduced among the noise! ---
 def execute_command(command: str) -> int:
+    """DANGER: Arbitrary command execution hidden among filler!"""
     # This call should be caught even if surrounded by many filler lines.
-    return os.system(command)
+    return os.system(command)  # CRITICAL: Shell command execution!
 
 
 def process_and_execute(command: str) -> int:
+    """INTENTIONAL: Chains through helpers to obfuscate the dangerous call."""
     chained = helper_three(helper_two(helper_one(command)))
-    return execute_command(chained)
+    return execute_command(chained)  # Eventually reaches os.system()
