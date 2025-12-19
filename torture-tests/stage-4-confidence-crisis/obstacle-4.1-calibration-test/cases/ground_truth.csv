@@ -1,0 +1,7 @@
+case_id,file,expected_label,difficulty,notes
+1,case_01_safe_sum.py,safe,trivial,Pure arithmetic with no external input.
+2,case_02_sql_injection.py,vulnerable,medium,Direct string interpolation into SQL query.
+3,case_03_parameterized.py,safe,medium,Parameterized query with bound parameters.
+4,case_04_eval.py,vulnerable,hard,Executes attacker-controlled code via eval.
+5,case_05_path_traversal.py,vulnerable,medium,Unvalidated path join that trusts user input.
+6,case_06_sanitized_path.py,safe,medium,Whitelisted file access with explicit allowlist.
