@@ -3,9 +3,11 @@ services:
     image: postgres:15
     container_name: demo-postgres
     environment:
+      # NOTE: For non-demo use, provide database credentials via environment variables
+      # or a secrets manager; do not hardcode them in this file.
       POSTGRES_DB: demodb
       POSTGRES_USER: demouser
-      POSTGRES_PASSWORD: demopass
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
