@@ -17,21 +17,27 @@ import uuid
 def filesystem_escape():
     """Attempt to write outside the sandbox root."""
     unique = uuid.uuid4().hex
-    target = f"/tmp/../escape-attempt-{unique}.txt"
-    with open(target, "w", encoding="utf-8") as handle:
-        handle.write("Sandbox escape attempt: filesystem\n")
+    target = f"/etc/escape-attempt-{unique}.txt"
+    try:
+        with open(target, "w", encoding="utf-8") as handle:
+            handle.write("Sandbox escape attempt: filesystem\n")
+    finally:
+        try:
+            os.remove(target)
+        except OSError:
+            # Best-effort cleanup; primary goal is the attempted write.
+            pass
     return target
 
 
 def network_escape():
     """Attempt to reach the public network."""
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.settimeout(2)
-    sock.connect(("1.1.1.1", 53))
-    sock.sendall(b"ping")
-    data = sock.recv(8)
-    sock.close()
-    return data
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.settimeout(2)
+        sock.connect(("1.1.1.1", 53))
+        sock.sendall(b"ping")
+        data = sock.recv(8)
+        return data
 
 
 def process_escape():

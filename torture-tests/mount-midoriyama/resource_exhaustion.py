@@ -42,8 +42,7 @@ def memory_bomb():
         else:
             _bounded(_alloc)
     finally:
-        if MODE != "detonate":
-            blobs.clear()
+        blobs.clear()
     return len(blobs)
 
 
@@ -63,14 +62,14 @@ def descriptor_storm():
         else:
             _bounded(_open)
     finally:
-        if MODE != "detonate":
-            for fd in handles:
-                os.close(fd)
-            for path in paths:
-                try:
-                    os.remove(path)
-                except OSError:
-                    pass
+        for fd in handles:
+            os.close(fd)
+        for path in paths:
+            try:
+                os.remove(path)
+            except OSError:
+                # Best-effort cleanup: ignore failures when removing temp files.
+                pass
     return len(handles)
 
 
@@ -96,8 +95,7 @@ def disk_fill():
                 for _ in range(BOUNDED_ITERATIONS):
                     handle.write(chunk)
     finally:
-        if MODE != "detonate":
-            cleaned = _cleanup(temp_path)
+        cleaned = _cleanup(temp_path)
     return {"path": temp_path, "cleaned": cleaned}
 
 
@@ -105,8 +103,7 @@ def thread_bomb():
     """Spawn threads without bound."""
     spawned = []
     def _spawn():
-        t = threading.Thread(target=time.sleep, args=(60,))
-        t.daemon = True
+        t = threading.Thread(target=time.sleep, args=(60,), daemon=True)
         t.start()
         spawned.append(t)
 

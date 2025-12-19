@@ -26,7 +26,9 @@ def leak_via_cpu(secret: str = SECRET):
     payload = sum(ord(ch) for ch in secret)
     end = time.time() + payload * 0.0001
     while time.time() < end:
-        payload = (payload * 3) ^ 0x5F3759DF  # keep CPU busy
+        # Use the classic Quake III fast inverse square root constant purely as
+        # an arbitrary bit-mixing value to keep the CPU busy.
+        payload = (payload * 3) ^ 0x5F3759DF
     return payload
 
 
