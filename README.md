@@ -17,6 +17,8 @@ This monorepo contains:
   - React Router DOM for routing
   
 - **`/docker-compose.yml`**: PostgreSQL 15 database service
+
+- **`/torture-tests/stage-4-confidence-crisis`**: Code Scalpel Ninja Warrior Stage 4 torture cases focused on uncertainty quantification
   
 - **`/.scalpel`**: Empty config directories
   - `policy/`: Policy configurations
