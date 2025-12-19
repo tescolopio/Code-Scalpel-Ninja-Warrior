@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: demo-backend
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/demodb
+    username: demouser
+    password: demopass
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
