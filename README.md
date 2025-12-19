@@ -17,6 +17,8 @@ This monorepo contains:
   - React Router DOM for routing
   
 - **`/docker-compose.yml`**: PostgreSQL 15 database service
+
+- **`/torture-tests/stage3-boundary-crossing`**: Fixtures for the Boundary Crossing level of the Code Scalpel Ninja Warrior torture suite (cross-language contract, schema drift, protocol hopping, ORM leaks, and message queue taint)
   
 - **`/.scalpel`**: Empty config directories
   - `policy/`: Policy configurations
