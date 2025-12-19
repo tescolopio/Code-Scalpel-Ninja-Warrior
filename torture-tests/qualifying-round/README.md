@@ -4,7 +4,7 @@ This directory contains self-contained torture tests for the first stage of the 
 
 | Obstacle | File | Focus |
 | --- | --- | --- |
-| 1.1 Unicode Minefield | `01-unicode-minefield.js` | Homoglyph identifiers, zero‑width characters, bidi text |
+| 1.1 Unicode Minefield | `01-unicode-minefield.js` | Homoglyph identifiers, zero-width characters, bidi text |
 | 1.2 Syntax Torture Chamber | `02-syntax-torture-chamber.js` | Deep nesting, long lines, ternary/precedence stress |
 | 1.3 Polyglot Parser | `03-polyglot-parser.js` | Extension/content mismatch (TypeScript in .js) |
 | 1.4 Incomplete Code Challenge | `04-incomplete-code-challenge.js` | Missing delimiters and mid-edit fragments |

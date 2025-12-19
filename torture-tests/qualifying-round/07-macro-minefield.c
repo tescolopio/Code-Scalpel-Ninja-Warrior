@@ -1,10 +1,12 @@
 #include <stdio.h>
 
 #define KEYWORD int
-#define MAKE_HANDLER(name, table)                 \
-  const char *name(const char *user) {            \
-    return "SELECT * FROM " table " WHERE user='" \
-           ; /* deliberately incomplete */        \
+#define MAKE_HANDLER(name, table)                                      \
+  const char *name(const char *user) {                                 \
+    static char query[128];                                            \
+    snprintf(query, sizeof(query), "SELECT * FROM %s WHERE user='%s'", \
+             table, user);                                             \
+    return query;                                                      \
   }
 
 MAKE_HANDLER(buildQuery, "users")
