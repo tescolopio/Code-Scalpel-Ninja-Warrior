@@ -11,6 +11,8 @@ This monorepo contains:
   - Spring Security
   - Spring Boot Actuator
   - PostgreSQL driver
+
+- **`/torture-tests/dynamic-labyrinth`**: Stage 2 (*Dynamic Labyrinth*) Python snippets aligned to the Code Scalpel Ninja Warrior torture tests
   
 - **`/frontend`**: React 18+ with Vite and TypeScript
   - Axios for HTTP requests
