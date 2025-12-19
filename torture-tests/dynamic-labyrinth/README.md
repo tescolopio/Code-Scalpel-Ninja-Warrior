@@ -21,6 +21,7 @@ These assets implement the **Dynamic Language Pathology** level from the *Code S
 
 ### Usage notes
 
-- Inputs labelled `user_input`, `action`, or `payload` should be treated as attacker-controlled.
+- These snippets require **Python 3.10 or later** (use of `type | None` and built-in generics like `list[str]`).
+- Inputs labeled `user_input`, `action`, or `payload` should be treated as attacker-controlled.
 - None of the snippets attempt to catch exceptions; analysis should surface the security implications of the dynamic behavior rather than runtime success.
 - These files are intentionally standalone to avoid cross-contamination of results between obstacles.
