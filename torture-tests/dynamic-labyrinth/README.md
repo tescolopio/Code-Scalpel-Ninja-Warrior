@@ -21,6 +21,7 @@ These assets implement the **Dynamic Language Pathology** level from the *Code S
 
 ### Usage notes
 
+- These snippets require **Python 3.10 or later** (they use features such as `type | None` and built-in generics like `list[str]`).
 - These snippets require **Python 3.10 or later** (use of `type | None` and built-in generics like `list[str]`).
 - Inputs labeled `user_input`, `action`, or `payload` should be treated as attacker-controlled.
 - None of the snippets attempt to catch exceptions; analysis should surface the security implications of the dynamic behavior rather than runtime success.
