@@ -22,9 +22,13 @@ def lookup_user(payload: dict) -> str:
 
 
 # STEP 3: fail-open error handling
+USER_ROLES = {"alice": "user"}
+
+
 def fetch_profile(user_id: str) -> dict:
     try:
-        return {"id": user_id, "role": "user"}
+        role = USER_ROLES[user_id]  # KeyError on unknown users
+        return {"id": user_id, "role": role}
     except KeyError:
         # STEP 4: configuration toggle that quietly enables the fallback
         # NOTE: the default of "true" is a deliberate fail-open anti-pattern

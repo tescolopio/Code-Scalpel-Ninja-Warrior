@@ -21,7 +21,11 @@ def effective_policy(config_path: str = "policy.json") -> dict:
     file_policy = load_policy_from_file(Path(config_path))
     raw_env_policy = os.getenv("CODE_SCALPEL_POLICY")
     env_policy = raw_env_policy if raw_env_policy else "{}"
-    merged = {**DEFAULT_POLICY, **file_policy, **json.loads(env_policy)}
+    try:
+        env_overrides = json.loads(env_policy)
+    except json.JSONDecodeError:
+        env_overrides = {}
+    merged = {**DEFAULT_POLICY, **file_policy, **env_overrides}
     return merged
 
 

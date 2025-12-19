@@ -35,5 +35,5 @@ def html_entity_xss() -> str:
 
 
 def nested_encoding() -> str:
-    base64_url = base64.b64encode("%2e%2e%2fsecret.txt".encode()).decode()
-    return urllib.parse.unquote(base64.b64decode(base64_url).decode())
+    # The payload is URL-encoded; a single decode reveals the path traversal.
+    return urllib.parse.unquote("%2e%2e%2fsecret.txt")
