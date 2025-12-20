@@ -45,3 +45,11 @@ Thumbs.db
 *.swp
 *~.nib
 __pycache__/
+
+# Benchmarks - Industry standard testing repos for Code Scalpel
+benchmarks/cvefixes/
+benchmarks/droidbench/
+benchmarks/juliet-java/
+benchmarks/owasp-benchmark/
+benchmarks/secbench/
+benchmarks/taintbench/

@@ -1,0 +1,33 @@
+# Code Scalpel Change Budget Configuration
+# Learn more: https://github.com/tescolopio/code-scalpel/blob/main/docs/guides/change_budgeting.md
+
+version: "1.0.0"
+
+# Maximum changes allowed per session - STRICT LIMITS FOR STAGE 5/6
+budgets:
+  # File-level limits
+  max_files_modified: 5
+  max_files_created: 3
+  max_files_deleted: 1
+  
+  # Line-level limits (per file)
+  max_lines_added: 200
+  max_lines_deleted: 150
+  max_lines_modified: 200
+  
+  # Total session limits
+  max_total_line_changes: 500
+  
+  # Stage 5 specific - prevent incremental erosion
+  max_cumulative_security_risk_score: 50
+  require_review_threshold: 30
+  
+# Reset behavior
+reset:
+  # Options: "session", "daily", "manual"
+  mode: "session"
+  
+# Exemptions (files that don't count against budget)
+exemptions:
+  - "tests/**/*.py"
+  - "docs/**/*.md"
