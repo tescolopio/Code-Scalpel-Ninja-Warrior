@@ -12,6 +12,18 @@ December 2025
 
 *"If it survives this gauntlet, it's ready for production."*
 
+---
+
+**📖 For Testing Instructions:** See [`TESTING_GUIDE.md`](./TESTING_GUIDE.md) for comprehensive guidance on:
+- Running all 477+ tests
+- Interpreting Code Scalpel tool outputs
+- Expected results and pass/fail criteria
+- Certification requirements
+
+**📋 Current Results:** See [`TEST_RESULTS.md`](./TEST_RESULTS.md)
+
+---
+
 # **Table of Contents**
 
 # **Executive Summary**
@@ -20,7 +32,7 @@ This document defines the ultimate stress test for Code Scalpel, a system design
 
 The philosophy is simple: any tool that claims to be "revolutionary" must prove it under adversarial conditions. Marketing claims are easy. Surviving a gauntlet designed by security researchers, compiler engineers, and battle-scarred developers is hard.
 
-This specification contains 40 obstacles organized into 6 stages, progressing from fundamental challenges to scenarios that have defeated every other tool in the market. Each obstacle is designed to expose a specific failure mode that would be catastrophic in production use.
+This specification contains 47 obstacles organized into 8 stages, progressing from fundamental challenges to scenarios that have defeated every other tool in the market. Each obstacle is designed to expose a specific failure mode that would be catastrophic in production use.
 
 ## **What This Document Proves**
 
@@ -45,6 +57,8 @@ The Code Scalpel Ninja Warrior gauntlet consists of six stages, each targeting a
 | 4 | The Confidence Crisis | Uncertainty Quantification | 6 | Expert |
 | 5 | The Policy Fortress | Guardrail & Policy Bypass Resistance | 7 | Elite |
 | 6 | Mount Midoriyama | Ultimate Sandbox & Symbolic Limits | 6 | Legendary |
+| 7 | Language Coverage | Multi-Language Analysis Mastery | 4 | Expert |
+| 8 | Advanced Taint Analysis | Security Coverage Excellence | 3 | Elite |
 
 ## **Scoring Philosophy**
 
@@ -1631,6 +1645,309 @@ After the adversarial agent's best efforts, either no vulnerability exists (agen
 
 Vulnerability exists undetected, audit trail is incomplete, or agent successfully bypassed policies using documented techniques.
 
+# **Stage 7: Language Coverage**
+
+**Focus: Multi-Language Analysis Mastery**
+
+Before claiming production readiness, Code Scalpel must demonstrate comprehensive support for the languages it claims to analyze. This stage tests parsing, AST generation, and security analysis across Python, TypeScript, JavaScript, and Java.
+
+*Why It Matters: A tool that claims to support a language but fails on modern features will create blind spots in security analysis. If TypeScript generics or Java records aren't understood, vulnerabilities using those features will be missed.*
+
+**OBSTACLE 7.1: PYTHON COMPREHENSIVE COVERAGE**
+
+**Threat Level:** HIGH
+
+*Test 100% coverage of Python AST nodes and modern language features.*
+
+**Real-World Threat**
+
+Python codebases use walrus operators, match/case statements, async generators, and complex type annotations. A tool that doesn't understand these features cannot analyze modern Python code.
+
+**The Challenge**
+
+Parse and analyze Python code using all modern features: walrus operator (Python 3.8+), match/case (3.10+), async generators, ParamSpec, TypedDict, structural pattern matching, and complex f-string nesting.
+
+**Test Variables**
+
+* Walrus operator in comprehensions and conditionals
+* Match/case with guards and pattern matching
+* Async generators with yield and await
+* Generic type annotations with ParamSpec and TypeVarTuple
+* Nested f-strings with format specs
+* Dataclasses with slots and KW_ONLY
+
+**Requirements for Success**
+
+* Parser must handle all Python 3.8+ features
+* AST must correctly represent all node types
+* Security analysis must work with modern syntax
+* Framework detection (Django, Flask, FastAPI) must work
+* Type annotations must be parsed and preserved
+
+**Expected Behavior (Pass)**
+
+All modern Python features parse correctly, AST is accurate, and security scanning detects vulnerabilities regardless of syntax style.
+
+**Failure Mode (Elimination)**
+
+Parser fails on valid Python 3.8+ code, misses vulnerabilities using modern syntax, or produces incorrect AST for new features.
+
+**OBSTACLE 7.2: TYPESCRIPT TYPE SYSTEM MASTERY**
+
+**Threat Level:** HIGH
+
+*Test >95% coverage of TypeScript type system features.*
+
+**Real-World Threat**
+
+TypeScript's advanced type system (generics, conditional types, mapped types) is used extensively in modern codebases. Vulnerabilities can hide in complex type transformations.
+
+**The Challenge**
+
+Parse and analyze TypeScript code using advanced type features: generic constraints, conditional types, mapped types, template literal types, decorators, and TSX/JSX.
+
+**Test Variables**
+
+* Generic constraints with extends and infer
+* Conditional types with distributive behavior
+* Mapped types with key remapping
+* Template literal types
+* Decorators (class, method, property, parameter)
+* TSX/JSX with React hooks
+
+**Requirements for Success**
+
+* Parser must handle TypeScript 4.5+ features
+* Type annotations must be preserved in AST
+* Security analysis must track taint through generics
+* Decorators must be recognized
+* >95% of TypeScript constructs must be supported
+
+**Expected Behavior (Pass)**
+
+TypeScript parses correctly, type information is preserved, and security scanning works with generic types and decorators.
+
+**Failure Mode (Elimination)**
+
+Parser fails on common TypeScript patterns, loses type information, or cannot track taint through generic functions.
+
+**OBSTACLE 7.3: JAVASCRIPT ES6+ MODERN FEATURES**
+
+**Threat Level:** MEDIUM
+
+*Test >95% coverage of modern JavaScript features.*
+
+**Real-World Threat**
+
+Modern JavaScript (ES6+) uses destructuring, spread operators, optional chaining, nullish coalescing, and async/await. Security vulnerabilities often exploit these features.
+
+**The Challenge**
+
+Parse and analyze JavaScript using ES6+ features: destructuring with defaults, spread/rest operators, optional chaining, nullish coalescing, async/await, JSX, and dynamic imports.
+
+**Test Variables**
+
+* Deep destructuring with defaults and rest
+* Spread operator in arrays and objects
+* Optional chaining with function calls
+* Nullish coalescing with complex expressions
+* Async/await with try/catch and Promise.all
+* JSX with React hooks
+* Dynamic imports and code splitting
+
+**Requirements for Success**
+
+* Parser must handle ES2015-ES2023 features
+* Security analysis must track taint through destructuring
+* XSS detection must work with JSX
+* Async control flow must be understood
+* >95% of ES6+ constructs must be supported
+
+**Expected Behavior (Pass)**
+
+Modern JavaScript parses correctly, taint tracking works through destructuring and spread, and XSS is detected in JSX.
+
+**Failure Mode (Elimination)**
+
+Parser fails on common ES6+ patterns, loses taint through destructuring, or misses XSS vulnerabilities in JSX.
+
+**OBSTACLE 7.4: JAVA MODERN FEATURES SUPPORT**
+
+**Threat Level:** HIGH
+
+*Test >95% coverage of modern Java features.*
+
+**Real-World Threat**
+
+Modern Java (11-21) includes records, sealed classes, pattern matching, text blocks, and enhanced switch expressions. Spring Boot 3 applications heavily use these features.
+
+**The Challenge**
+
+Parse and analyze Java code using modern features: records, sealed classes, pattern matching for instanceof and switch, text blocks, var keyword, and Spring annotations.
+
+**Test Variables**
+
+* Records with compact constructors
+* Sealed classes and interfaces
+* Pattern matching for instanceof
+* Enhanced switch expressions with yield
+* Text blocks with embedded SQL
+* Local variable type inference (var)
+* Spring annotations (@RestController, @Transactional)
+
+**Requirements for Success**
+
+* Parser must handle Java 11-21 features
+* Records must be recognized as data classes
+* Text blocks containing SQL must be checked for injection
+* Spring framework patterns must be detected
+* >95% of modern Java constructs must be supported
+
+**Expected Behavior (Pass)**
+
+Modern Java parses correctly, Spring patterns are recognized, and SQL injection in text blocks is detected.
+
+**Failure Mode (Elimination)**
+
+Parser fails on Java 11+ features, misses Spring-specific vulnerabilities, or cannot analyze record classes.
+
+# **Stage 8: Advanced Taint Analysis**
+
+**Focus: Security Coverage Excellence**
+
+This stage tests Code Scalpel's core security value proposition: comprehensive vulnerability detection across languages, files, and boundaries. It validates the claim of detecting 17+ vulnerability types with cross-file and cross-language taint tracking.
+
+*Why It Matters: A security tool is only as good as its vulnerability coverage. Missing even one common vulnerability type creates a false sense of security that is worse than no scanning at all.*
+
+**OBSTACLE 8.1: COMPREHENSIVE VULNERABILITY COVERAGE**
+
+**Threat Level:** CRITICAL
+
+*Test detection of 17+ distinct vulnerability types.*
+
+**Real-World Threat**
+
+Production applications face diverse threats: SQL injection, XSS, command injection, XXE, SSRF, path traversal, deserialization attacks, and more. A security tool must detect all common vulnerability classes.
+
+**The Challenge**
+
+Present test cases for each of 17+ vulnerability types spanning injection attacks, path traversal, XXE, SSRF, template injection, deserialization, and cryptographic weaknesses.
+
+**Test Variables**
+
+* SQL Injection (UNION, blind, time-based)
+* NoSQL Injection (MongoDB, Redis, Elasticsearch)
+* Command Injection (direct, shell, pipe)
+* XSS (reflected, stored, DOM-based)
+* Path Traversal (file, ZIP slip, symlink)
+* XXE and XML Bomb attacks
+* SSRF (HTTP, file://, cloud metadata)
+* Template Injection (Jinja2, Mako, Thymeleaf)
+* Deserialization (pickle, YAML, Java)
+* Weak Cryptography (MD5, SHA1, DES)
+* Hardcoded Secrets (API keys, passwords)
+* Open Redirect
+* LDAP Injection
+* XPath Injection
+* Regex DoS (ReDoS)
+* Expression Language Injection (OGNL, SpEL)
+* Mass Assignment
+
+**Requirements for Success**
+
+* Must detect all 17+ vulnerability types
+* Each type must have multiple variants tested
+* False positive rate must be <10%
+* Must provide CWE numbers for each finding
+* Confidence scores must be calibrated
+
+**Expected Behavior (Pass)**
+
+All 17+ vulnerability types are detected with <10% false positives, correct CWE mappings, and calibrated confidence scores.
+
+**Failure Mode (Elimination)**
+
+Missing any of the 17 core vulnerability types, >10% false positives, or incorrect CWE classifications.
+
+**OBSTACLE 8.2: CROSS-FILE TAINT TRACKING**
+
+**Threat Level:** HIGH
+
+*Test taint propagation across multiple files and modules.*
+
+**Real-World Threat**
+
+Real applications are modular. Tainted data flows from source file through utility functions to sink in a different file. Single-file analysis misses these vulnerabilities.
+
+**The Challenge**
+
+Present multi-file vulnerabilities where taint flows through imports: main file receives user input, passes to utility module, which passes to database module containing the SQL injection sink.
+
+**Test Variables**
+
+* Python: main.py → utils.py → db.py (SQL injection)
+* JavaScript: index.js → helpers.js → api.js (XSS)
+* TypeScript: controller.ts → service.ts → repository.ts
+* Java: Controller → Service → Repository (Spring)
+* Three+ file chains
+* Taint through class inheritance
+* Taint through callback functions
+
+**Requirements for Success**
+
+* Must track taint across file boundaries
+* Must handle import/export patterns (ES6, CommonJS, Python)
+* Must trace through function calls in other files
+* Must handle class method calls across files
+* Must report complete taint path from source to sink
+
+**Expected Behavior (Pass)**
+
+Cross-file vulnerabilities are detected with complete taint paths showing the flow through all intermediate files.
+
+**Failure Mode (Elimination)**
+
+Taint is lost at file boundaries, incomplete taint paths, or failure to follow imports.
+
+**OBSTACLE 8.3: MULTI-LANGUAGE TAINT FLOW**
+
+**Threat Level:** EXPERT
+
+*Test taint tracking across language boundaries via APIs.*
+
+**Real-World Threat**
+
+Microservice architectures use multiple languages. A Python backend might receive data from a JavaScript frontend. Taint must persist across these boundaries.
+
+**The Challenge**
+
+Present vulnerabilities that span language boundaries: JavaScript frontend sends user input to Python REST API, which stores in database. Or TypeScript calls Python microservice with tainted data.
+
+**Test Variables**
+
+* JavaScript → Python REST API (POST body)
+* TypeScript → Python GraphQL (query variables)
+* Java → Python gRPC service
+* Frontend form data → Backend SQL query
+* JSON payload across language boundary
+* Protocol buffer serialization
+
+**Requirements for Success**
+
+* Must recognize trust boundaries at API endpoints
+* Must track taint through serialization (JSON, protobuf)
+* Must connect frontend sources to backend sinks
+* Must understand API contracts (REST, GraphQL, gRPC)
+* Must flag when trust assumptions are violated
+
+**Expected Behavior (Pass)**
+
+Multi-language vulnerabilities are detected with clear indication of language boundaries and serialization points.
+
+**Failure Mode (Elimination)**
+
+Taint is lost at language boundaries, API contracts are not understood, or trust boundaries are not recognized.
+
 # **Evaluation Framework**
 
 ## **Completion Criteria**
@@ -1645,6 +1962,8 @@ A stage is considered complete when all obstacles are passed. An obstacle is pas
 | Stage 4: Confidence Crisis | 6/6 (100%) | 0 |
 | Stage 5: Policy Fortress | 7/7 (100%) | 0 |
 | Stage 6: Mount Midoriyama | 5/6 (83%) | 1 |
+| Stage 7: Language Coverage | 4/4 (100%) | 0 |
+| Stage 8: Advanced Taint | 3/3 (100%) | 0 |
 
 ## **Certification Levels**
 
@@ -1653,6 +1972,8 @@ A stage is considered complete when all obstacles are passed. An obstacle is pas
 | Bronze | Stage 1 | Basic Parser Certification |
 | Silver | Stages 1-3 | Cross-Language Analysis Certification |
 | Gold | Stages 1-5 | Production Security Certification |
+| Platinum | Stages 1-7 | Multi-Language Mastery Certification |
+| Diamond | Stages 1-8 | Complete Security Coverage Certification |
 | Ninja Warrior | All Stages | Ultimate Code Scalpel Certification |
 
 ## **Evidence Requirements**
@@ -1664,6 +1985,147 @@ For each passed obstacle, the following evidence must be produced:
 * Confidence scores and any uncertainty acknowledgments  
 * Performance metrics (time, memory)  
 * Hash of evidence for integrity verification
+
+# **Supporting Test Modules**
+
+In addition to the 8 main stages, Code Scalpel includes comprehensive test suites for critical supporting features. These modules are not part of the main gauntlet but are essential for production deployment.
+
+## **Audit Trail Module**
+
+**Purpose:** Tamper-resistant, cryptographically-signed logging of all security events for compliance and forensics.
+
+**Test Coverage:** 103 test cases across 5 test files
+
+**Key Features:**
+* HMAC-SHA256 signing of all events
+* Tamper detection via integrity verification
+* JSON-lines format for streaming and parsing
+* Event type classification (policy violations, overrides, tampering)
+* Severity levels (LOW, MEDIUM, HIGH, CRITICAL)
+
+**Test Files:**
+* `test_event_recording.py` - Event schema and JSON-lines format (15 tests)
+* `test_hmac_signing.py` - HMAC-SHA256 signing and secret management (18 tests)
+* `test_tamper_detection.py` - Tampering detection and corruption handling (23 tests)
+* `test_event_types.py` - All event types and severity levels (23 tests)
+* `test_edge_cases.py` - Concurrency, large payloads, error handling (24 tests)
+
+**Critical Requirements:**
+* Every security event must be logged with HMAC signature
+* Tampered logs must be immediately detected
+* Audit trail must survive system failures (append-only, durable)
+* Event ordering must be preserved and verifiable
+
+## **Change Budget (Blast Radius Control) Module**
+
+**Purpose:** Limiting the scope of AI agent modifications with hard caps on files, lines, and complexity to control "blast radius."
+
+**Test Coverage:** 117 test cases across 4 test files
+
+**Key Features:**
+* Maximum files per operation
+* Maximum lines per file and total lines
+* Maximum complexity increase (cyclomatic complexity)
+* Allowed file patterns (glob-based)
+* Forbidden paths (protect critical areas like .git/)
+* Cumulative tracking with daily refresh
+
+**Test Files:**
+* `test_constraint_checks.py` - All constraint types with severity ordering (38 tests)
+* `test_actionable_errors.py` - Error responses and suggestions (26 tests)
+* `test_cumulative_tracking.py` - Cumulative budget tracking and refresh (23 tests)
+* `test_edge_cases.py` - Configuration, edge cases, real-world scenarios (30 tests)
+
+**Constraint Check Order (by Severity):**
+1. Forbidden paths (CRITICAL) - Cannot modify .git/, security configs
+2. File patterns (HIGH) - File type restrictions
+3. Max files (HIGH) - Total file count limit
+4. Max lines/file (MEDIUM) - Per-file line limits
+5. Max total lines (HIGH) - Aggregate line limit
+6. Complexity delta (MEDIUM) - Cyclomatic complexity increase
+
+**Critical Requirements:**
+* Budget violations must be detected before modifications are applied
+* Error messages must be actionable with specific suggestions
+* Cumulative tracking must work across multiple operations
+* No gaming of constraints through creative accounting
+
+## **Cryptographic Policy Verification Module**
+
+**Purpose:** Detecting unauthorized modifications to policy files using SHA-256 hashes and HMAC-signed manifests.
+
+**Test Coverage:** 105 test cases across 5 test files
+
+**Key Features:**
+* SHA-256 file hashing for integrity verification
+* HMAC-SHA256 signed manifests for tamper detection
+* Multiple manifest sources (file, git, environment variable)
+* Unexpected file detection (prevent policy injection)
+* Strict mode for enterprise compliance
+
+**Test Files:**
+* `test_manifest_signing.py` - Manifest creation and HMAC signing (21 tests)
+* `test_manifest_verification.py` - Manifest loading and signature verification (20 tests)
+* `test_file_hash_verification.py` - SHA-256 file hash verification (28 tests)
+* `test_unexpected_files.py` - Unexpected file detection and attack prevention (19 tests)
+* `test_admin_workflow.py` - Administrator workflow and key management (17 tests)
+
+**Manifest Schema:**
+```json
+{
+  \"version\": \"1.0\",
+  \"created_at\": \"2025-12-19T14:30:00.000Z\",
+  \"files\": {
+    \"policy.yaml\": {
+      \"hash\": \"sha256:a1b2c3d4e5f6...\",
+      \"size\": 2048
+    }
+  },
+  \"signature\": \"hmac-sha256:abcdef123456...\"
+}
+```
+
+**Critical Requirements:**
+* Any modification to policy files must be detected
+* Manifest signature must be verified before trusting policy
+* Unexpected files in policy directory must be flagged
+* Administrator workflow must be secure and auditable
+
+## **Policy Engine Module**
+
+**Purpose:** Preventing AI agents from introducing security vulnerabilities using declarative rules.
+
+**Test Coverage:** 105+ test cases across 5 test files
+
+**Key Features:**
+* Semantic analysis mode (pure Python, <1ms)
+* Rego/OPA mode (complex rules, ~50ms)
+* FAIL CLOSED security model (deny on error)
+* Multi-language pattern detection (Python, Java, TypeScript/JS)
+* Built-in vulnerability patterns (SQL injection, XSS, command injection, etc.)
+
+**Test Files:**
+* `test_python_patterns.py` - Python vulnerability patterns (40+ tests)
+* `test_java_patterns.py` - Java vulnerability patterns (30+ tests)
+* `test_typescript_patterns.py` - TypeScript/JS patterns (35+ tests)
+* `test_security_model.py` - FAIL CLOSED security model tests
+* `test_performance.py` - Performance benchmarks
+
+**Vulnerability Patterns Detected:**
+* SQL Injection (string concatenation, f-strings, format)
+* Command Injection (subprocess, os.system, Runtime.exec)
+* XSS (unescaped output, innerHTML)
+* Server-Side Template Injection (Jinja2, Freemarker, Thymeleaf)
+* Path Traversal (file operations with user input)
+* Hardcoded Secrets (API keys, passwords, tokens)
+
+**FAIL CLOSED Security Model:**
+* Policy file missing → DENY ALL operations
+* Invalid YAML → DENY ALL operations
+* OPA timeout (30s) → DENY operation
+* Any exception → DENY operation
+
+This ensures security is never compromised due to configuration or runtime errors.
 
 # **Appendix A: OWASP Mapping**
 
