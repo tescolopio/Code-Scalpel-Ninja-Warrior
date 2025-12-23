@@ -31,7 +31,7 @@ import subprocess
 import sys
 import time
 from dataclasses import dataclass, field, asdict
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
 from typing import Optional
@@ -45,6 +45,8 @@ class Stage(Enum):
     CONFIDENCE_CRISIS = 4
     POLICY_FORTRESS = 5
     MOUNT_MIDORIYAMA = 6
+    LANGUAGE_COVERAGE = 7
+    ADVANCED_TAINT = 8
 
 
 class Language(Enum):
@@ -185,6 +187,10 @@ class TortureTestHarness:
         Stage.CONFIDENCE_CRISIS: (6, 6, 1.0, 0),    # 100%, 0 honorable failures
         Stage.POLICY_FORTRESS: (7, 7, 1.0, 0),      # 100%, 0 honorable failures
         Stage.MOUNT_MIDORIYAMA: (5, 6, 0.83, 1),    # 83%, 1 honorable failure
+        # Stages 7-8 were added after the original 1-6 gauntlet.
+        # Keep minimum requirements simple: these stages should not be empty.
+        Stage.LANGUAGE_COVERAGE: (1, 1, 1.0, 0),
+        Stage.ADVANCED_TAINT: (1, 1, 1.0, 0),
     }
 
     # Certification levels
@@ -215,22 +221,50 @@ class TortureTestHarness:
 
     def discover_tests(self) -> list[TestCase]:
         """Discover all test cases from the torture-tests directory."""
-        test_cases = []
+        test_cases: list[TestCase] = []
+        seen_files: set[Path] = set()
 
-        # Stage directory mappings
-        stage_dirs = {
-            Stage.QUALIFYING_ROUND: "qualifying-round",
-            Stage.DYNAMIC_LABYRINTH: "dynamic-labyrinth",
-            Stage.BOUNDARY_CROSSING: "stage3-boundary-crossing",
-            Stage.CONFIDENCE_CRISIS: "stage-4-confidence-crisis",
-            Stage.POLICY_FORTRESS: "policy-fortress",
-            Stage.MOUNT_MIDORIYAMA: "mount-midoriyama",
+        # Stage-to-directory mapping.
+        # This intentionally avoids moving files around: several suites grew outside
+        # the original stage folders, so we map them into the closest stage.
+        stage_dirs: dict[Stage, list[str]] = {
+            Stage.QUALIFYING_ROUND: ["stage1-qualifying-round"],
+            Stage.DYNAMIC_LABYRINTH: ["stage2-dynamic-labyrinth"],
+            Stage.BOUNDARY_CROSSING: [
+                "stage3-boundary-crossing",
+                "cross-language-integration",
+            ],
+            Stage.CONFIDENCE_CRISIS: ["stage4-confidence-crisis"],
+            Stage.POLICY_FORTRESS: [
+                "stage5-policy-fortress",
+                "policy-engine",
+                "crypto-verify",
+                "audit-trail",
+                "change-budget",
+            ],
+            Stage.MOUNT_MIDORIYAMA: ["stage6-mount-midoriyama"],
+            Stage.LANGUAGE_COVERAGE: [
+                "stage7-language-coverage",
+                "language-coverage",
+                "framework-specific",
+                "advanced-async",
+            ],
+            Stage.ADVANCED_TAINT: ["stage8-advanced-taint"],
         }
 
-        for stage, dir_name in stage_dirs.items():
-            stage_dir = self.torture_tests_dir / dir_name
-            if stage_dir.exists():
-                test_cases.extend(self._discover_stage_tests(stage, stage_dir))
+        for stage, dir_names in stage_dirs.items():
+            for dir_name in dir_names:
+                stage_dir = self.torture_tests_dir / dir_name
+                if not stage_dir.exists():
+                    continue
+
+                for test_case in self._discover_stage_tests(stage, stage_dir):
+                    # Deduplicate in case a directory is mapped to multiple stages
+                    # or a file is reachable via multiple paths.
+                    if test_case.file_path in seen_files:
+                        continue
+                    seen_files.add(test_case.file_path)
+                    test_cases.append(test_case)
 
         self.test_cases = test_cases
         return test_cases
@@ -314,6 +348,7 @@ class TortureTestHarness:
             "homoglyph": VulnerabilityType.HOMOGLYPH_ATTACK,
             "bidi": VulnerabilityType.BIDI_TEXT_ATTACK,
             "sandbox escape": VulnerabilityType.SANDBOX_ESCAPE_FILESYSTEM,
+            "resource exhaustion": VulnerabilityType.RESOURCE_EXHAUSTION,
             "xss": VulnerabilityType.XSS_STORED,
             "template injection": VulnerabilityType.TEMPLATE_INJECTION,
             "prototype pollution": VulnerabilityType.PROTOTYPE_POLLUTION,
@@ -444,7 +479,7 @@ class TortureTestHarness:
             "file_path": str(test_case.file_path),
             "passed": result.passed,
             "confidence": result.confidence_score,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }, sort_keys=True)
         return hashlib.sha256(evidence_data.encode()).hexdigest()
 
@@ -461,7 +496,7 @@ class TortureTestHarness:
 
         return {
             "report_version": "1.0",
-            "generated_at": datetime.utcnow().isoformat(),
+            "generated_at": datetime.now(timezone.utc).isoformat(),
             "certification_level": cert_level,
             "coverage": asdict(coverage),
             "stage_results": {
@@ -490,9 +525,9 @@ def main():
     )
     parser.add_argument(
         "--stage",
-        choices=["all", "1", "2", "3", "4", "5", "6"],
+        choices=["all", "1", "2", "3", "4", "5", "6", "7", "8"],
         default="all",
-        help="Stage to run (1-6 or 'all')"
+        help="Stage to run (1-8 or 'all')"
     )
     parser.add_argument(
         "--generate-evidence",
