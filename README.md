@@ -42,7 +42,8 @@ The full 47-obstacle gauntlet is specified in [`Code_Scalpel_Ninja_Warrior_Tortu
 | 3. Boundary Crossing | Cross-language contract enforcement | 6 | `torture-tests/stage3-boundary-crossing` | Reset trust at network/serialization hops; detect schema drift, type evaporation, ORM escape hatches, and MQ taint chains |
 | 4. Confidence Crisis | Uncertainty quantification | 6 | `torture-tests/stage4-confidence-crisis` | Calibrated confidence, ambiguity acknowledgment, contradiction surfacing, and monotonic confidence decay along inference chains |
 | 5. Policy Fortress | Guardrail & policy bypass resistance | 7 | `torture-tests/stage5-policy-fortress` | Block incremental erosion, encoding evasion, transitive/semantic bypasses, config tampering, social engineering, and budget gaming |
-| 6. Mount Midoriyama | Sandbox & symbolic limits | 6 | `torture-tests/stage6-mount-midoriyama` | Contain sandbox escapes/resource abuse/side channels and enforce timeouts on path explosion and solver torture; resist adversarial agents || 7. Language Coverage | Multi-language analysis mastery | 4 | `torture-tests/stage7-language-coverage` | Comprehensive parsing and security analysis for Python (100%), TypeScript (>95%), JavaScript (>95%), and Java (>95%) including modern language features |
+| 6. Mount Midoriyama | Sandbox & symbolic limits | 6 | `torture-tests/stage6-mount-midoriyama` | Contain sandbox escapes/resource abuse/side channels and enforce timeouts on path explosion and solver torture; resist adversarial agents |
+| 7. Language Coverage | Multi-language analysis mastery | 4 | `torture-tests/stage7-language-coverage` | Comprehensive parsing and security analysis for Python (100%), TypeScript (>95%), JavaScript (>95%), and Java (>95%) including modern language features |
 | 8. Advanced Taint Analysis | Security coverage excellence | 3 | `torture-tests/stage8-advanced-taint` | Detect 17+ vulnerability types with cross-file and cross-language taint tracking through REST/GraphQL/gRPC boundaries |
 
 **Supporting Test Modules** (not part of main gauntlet, but essential for production):
@@ -61,7 +62,8 @@ Evidence expectations (results, confidence, performance metrics, hashes) follow 
 - Troubleshooting common issues
 
 **Quick Links:**
-- 📋 [Test Results](./TEST_RESULTS.md) - Current test execution results
+- 🧰 [MCP Tool Results Template](./MCP_TOOL_RESULTS_TEMPLATE.md) - Copy into `results/` (ignored) and fill per run
+- 📋 [Test Results Template](./TEST_RESULTS_TEMPLATE.md) - Copy into `results/` (ignored) and fill per run
 - 📊 [Benchmark Results](./BENCHMARK_RESULTS.md) - Performance metrics
 - 📖 [Main Specification](./Code_Scalpel_Ninja_Warrior_Torture_Tests.md) - Complete obstacle descriptions
 - 📝 [Stage 7 & 8 Summary](./STAGE_7_8_SUMMARY.md) - Language coverage and taint analysis details

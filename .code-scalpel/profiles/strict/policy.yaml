@@ -1,0 +1,42 @@
+# Code Scalpel Policy Configuration
+# Learn more: https://github.com/tescolopio/code-scalpel/blob/main/docs/policy_engine_guide.md
+
+version: "1.0.0"
+
+# Policy enforcement mode - SET TO BLOCK FOR STAGE 5/6 TESTING
+enforcement: "block"  # Options: "warn", "block", "disabled"
+
+# Security rules
+security:
+  # Block SQL injection attempts
+  sql_injection: true
+  
+  # Block command injection attempts
+  command_injection: true
+  
+  # Block path traversal attempts
+  path_traversal: true
+  
+  # Block XSS attempts
+  xss: true
+  
+  # Block eval/exec usage
+  code_injection: true
+  
+  # Block base64 encoded payloads
+  encoding_evasion: true
+  
+  # Detect incremental erosion patterns
+  incremental_changes: true
+
+# Change budgeting - ENABLED FOR STAGE 5/6 TESTING
+budgeting:
+  enabled: true
+  max_files_per_session: 5
+  max_lines_per_file: 200
+  max_total_changes: 500
+
+# Audit trail
+audit:
+  enabled: true
+  log_file: ".code-scalpel/audit.log"

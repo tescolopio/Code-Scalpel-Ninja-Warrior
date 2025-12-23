@@ -5,6 +5,21 @@
 
 ---
 
+## Addendum: “Top 4” Tougher Fixtures (v3.2.0)
+
+**Test Date:** December 22, 2025  
+**Code Scalpel Version:** 3.2.0 (MCP server)  
+**Why:** Add fixtures that produce measurable outcomes for tools that weren’t strongly graded by earlier stages.
+
+| Fixture | Tool(s) | Expected | Actual (v3.2.0) |
+|---|---|---|---|
+| `torture-tests/stage7-language-coverage/obstacle-7.4.1-vulnerable-dependency-fixtures/` | `mcp_code-scalpel_scan_dependencies` | Vulnerable manifests show findings; fixed manifests show none | ✅ Works as intended after adding scanner-friendly filenames (`package.json`, `requirements.txt`, `pom.xml`): vulnerable>0, fixed=0 |
+| `torture-tests/stage3-boundary-crossing/obstacle-3.1-type-system-evaporation/*` | `mcp_code-scalpel_type_evaporation_scan` | Vulnerable pair triggers cross-file issue; safe pair clears it | ✅ Vulnerable: cross-file issue present. ✅ Safe: 0 cross-file issues (backend still emits a conservative response-echo warning) |
+| `torture-tests/stage5-policy-fortress/obstacle-5.8-simulate-refactor-fixtures/*` | `mcp_code-scalpel_simulate_refactor` | Safe typing is safe; eval/shell are unsafe | ✅ Eval flagged unsafe. ✅ Typing safe. ⚠️ `shell=True` not flagged here, but `mcp_code-scalpel_unified_sink_detect` flags it as a shell-command sink |
+| `torture-tests/stage8-advanced-taint/crossfile-hard/` | `mcp_code-scalpel_cross_file_security_scan` | Detect cross-file SQLi (routes → db sink) | ⚠️ No cross-file vuln reported. Single-file `mcp_code-scalpel_security_scan` on `db.py` does flag SQL injection |
+
+---
+
 ## Stage 7: Language Coverage Testing
 
 ### Requirements

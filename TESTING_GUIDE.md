@@ -72,9 +72,43 @@ pytest torture-tests/crypto-verify/
 pytest torture-tests/policy-engine/
 ```
 
+## MCP Tool Contract Tests (Tool-by-Tool)
+
+For repeatable, automated checks of **individual MCP tool behavior**, run the MCP contract tests:
+
+```bash
+pytest torture-tests/mcp_contract/
+```
+
+These tests:
+- Spin up a local `code-scalpel mcp --http` server for the duration of the test session.
+- Call `initialize`, `tools/list`, and selected `tools/call` cases.
+- Assert basic *contracts* (shape, key invariants, negative controls) rather than exact full outputs.
+
+Known-bug behaviors are marked `xfail` so regressions are visible without blocking the suite.
+
 ---
 
 ## Running Tests
+
+## Stage-Based Configuration (.code-scalpel)
+
+This repo keeps **stage-appropriate** Code Scalpel governance/policy settings under `.code-scalpel/profiles/`:
+- `relaxed` (intended for Stages 1–4): enforcement `warn`, budgets effectively off / very high.
+- `strict` (intended for Stages 5–8): enforcement `block`, budgets tight.
+
+To switch the *active* profile (updates `.code-scalpel/config.json`, `.code-scalpel/policy.yaml`, `.code-scalpel/budget.yaml`):
+
+```bash
+python torture-tests/tools/apply_code_scalpel_profile.py --stage 3
+python torture-tests/tools/apply_code_scalpel_profile.py --stage 6
+
+# Or explicitly:
+python torture-tests/tools/apply_code_scalpel_profile.py --profile relaxed
+python torture-tests/tools/apply_code_scalpel_profile.py --profile strict
+```
+
+If your MCP server reads config only at startup, restart the MCP server after switching profiles.
 
 ### Option 1: Manual Testing with Code Scalpel Tools
 
@@ -87,7 +121,9 @@ For **main gauntlet obstacles**, tests are designed to be run manually using Cod
    - mcp_code-scalpel_scan_file_for_vulnerabilities
    - mcp_code-scalpel_get_cross_file_dependencies
 3. Compare output against expected behavior in obstacle README
-4. Record results in TEST_RESULTS.md
+4. Record results in an ignored local output file under `results/` (recommended):
+  - Start from `TEST_RESULTS_TEMPLATE.md` / `MCP_TOOL_RESULTS_TEMPLATE.md`
+  - Write your filled-in outputs to `results/TEST_RESULTS.md` and `results/MCP_TOOL_RESULTS.md`
 ```
 
 **Example workflow:**
