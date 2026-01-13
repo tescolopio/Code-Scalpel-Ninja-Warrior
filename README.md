@@ -4,7 +4,28 @@
 
 This repository contains rigorous test cases designed to push the [Code Scalpel](https://github.com/code-scalpel) MCP server to its limits. Unlike standard unit tests, these "Ninja Warrior" stages test resilience against complex, adversarial, and deeply nested code patterns.
 
-## 🏗️ Architecture: The Workflow Bio-Dome
+## � Start Here: Choose Your Path
+
+We have organized this validation suite for three distinct audiences:
+
+### 👩‍💻 For Developers: The Gauntlet
+*   **Goal:** Have fun trying to break the tool with "Ninja Warrior" style coding puzzles.
+*   **Start Here:** [`challenges/`](challenges/)
+*   **Highlight:** Try **Challenge 02 (Legacy Nightmare)** or **Challenge 05 (Blindfold Maze)**.
+
+### 🕵️ For CISOs & Security Auditors: The Evidence
+*   **Goal:** Verify "Deep Security" capabilities and adversarial resilience.
+*   **Start Here:** [`torture-tests/`](torture-tests/) & [`workflow-deep-security/`](workflow-deep-security/)
+*   **Highlight:** Check **Stage 9 (Anti-Hallucination)** and **Stage 10 (Adversarial Vibe Coding)** to see how we handle AI failure modes involving honeypots and bad patterns.
+
+### 💼 For Enterprise Buyers: Compliance Assurance
+*   **Goal:** Confirm regulatory compliance, audit trails, and ROI.
+*   **Start Here:** [`workflow-compliance/`](workflow-compliance/)
+*   **Highlight:** Review `BENCHMARK_DEFENSE.md` for the Pro vs. Community tier analysis, and `audit-trail/` for tamper detection proofs.
+
+---
+
+## �🏗️ Architecture: The Workflow Bio-Dome
 
 The tests are organized into 5 primary workflows, mirroring how AI agents use Code Scalpel in the wild. Each workflow unifies classic "Challenges", "Torture Tests", and Industry "Benchmarks".
 
