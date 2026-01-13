@@ -214,47 +214,57 @@ class TortureTestHarness:
 
     def __init__(self, base_dir: Path):
         self.base_dir = base_dir
-        self.torture_tests_dir = base_dir / "torture-tests"
-        self.evidence_dir = base_dir / "evidence"
+        # In the new structure, base_dir is the repo root.
+        # The tests are now in workflow-* folders at the root.
+        self.repo_root = base_dir
+        self.evidence_dir = base_dir / "harness/evidence"
         self.test_cases: list[TestCase] = []
         self.results: list[TestResult] = []
 
     def discover_tests(self) -> list[TestCase]:
-        """Discover all test cases from the torture-tests directory."""
+        """Discover all test cases from the workflow directories."""
         test_cases: list[TestCase] = []
         seen_files: set[Path] = set()
 
-        # Stage-to-directory mapping.
-        # This intentionally avoids moving files around: several suites grew outside
-        # the original stage folders, so we map them into the closest stage.
+        # New Stage-to-Workflow mapping.
         stage_dirs: dict[Stage, list[str]] = {
-            Stage.QUALIFYING_ROUND: ["stage1-qualifying-round"],
-            Stage.DYNAMIC_LABYRINTH: ["stage2-dynamic-labyrinth"],
+            Stage.QUALIFYING_ROUND: [
+                "workflow-structural/stage1-qualifying-round"
+            ],
+            Stage.DYNAMIC_LABYRINTH: [
+                "workflow-deep-security/stage2-dynamic-labyrinth"
+            ],
             Stage.BOUNDARY_CROSSING: [
-                "stage3-boundary-crossing",
-                "cross-language-integration",
+                "workflow-deep-security/stage3-boundary-crossing",
+                "workflow-deep-security/cross-language-integration",
             ],
-            Stage.CONFIDENCE_CRISIS: ["stage4-confidence-crisis"],
+            Stage.CONFIDENCE_CRISIS: [
+                "workflow-structural/stage4-confidence-crisis"
+            ],
             Stage.POLICY_FORTRESS: [
-                "stage5-policy-fortress",
-                "policy-engine",
-                "crypto-verify",
-                "audit-trail",
-                "change-budget",
+                "workflow-reconnaissance/stage5-policy-fortress",
+                "workflow-compliance/policy-engine",
+                "workflow-compliance/crypto-verify",
+                "workflow-compliance/audit-trail",
+                "workflow-compliance/change-budget",
             ],
-            Stage.MOUNT_MIDORIYAMA: ["stage6-mount-midoriyama"],
+            Stage.MOUNT_MIDORIYAMA: [
+                "workflow-compliance/stage6-mount-midoriyama"
+            ],
             Stage.LANGUAGE_COVERAGE: [
-                "stage7-language-coverage",
-                "language-coverage",
-                "framework-specific",
-                "advanced-async",
+                "workflow-structural/stage7-language-coverage",
+                "workflow-deep-security/language-coverage",
+                "workflow-deep-security/framework-specific",
+                "workflow-deep-security/advanced-async",
             ],
-            Stage.ADVANCED_TAINT: ["stage8-advanced-taint"],
+            Stage.ADVANCED_TAINT: [
+                 "workflow-deep-security/stage8-advanced-taint"
+            ],
         }
 
         for stage, dir_names in stage_dirs.items():
             for dir_name in dir_names:
-                stage_dir = self.torture_tests_dir / dir_name
+                stage_dir = self.repo_root / dir_name
                 if not stage_dir.exists():
                     continue
 

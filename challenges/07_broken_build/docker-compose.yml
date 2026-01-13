@@ -1,0 +1,7 @@
+version: '3'
+services:
+  app:
+    build: .
+    volumes:
+      # THE TRAP: ./config/setup.json does not exist in the repo
+      - ./config/setup.json:/app/config.json 

@@ -1,0 +1,7 @@
+security:
+  banned_imports:
+    - hashlib.md5
+    - os.system
+quality:
+  require_docstrings: true
+  max_complexity: 5
