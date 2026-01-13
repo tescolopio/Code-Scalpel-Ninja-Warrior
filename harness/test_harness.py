@@ -47,6 +47,8 @@ class Stage(Enum):
     MOUNT_MIDORIYAMA = 6
     LANGUAGE_COVERAGE = 7
     ADVANCED_TAINT = 8
+    ANTI_HALLUCINATION = 9
+    VIBE_CODING_ADVERSARIAL = 10
 
 
 class Language(Enum):
@@ -188,9 +190,12 @@ class TortureTestHarness:
         Stage.POLICY_FORTRESS: (7, 7, 1.0, 0),      # 100%, 0 honorable failures
         Stage.MOUNT_MIDORIYAMA: (5, 6, 0.83, 1),    # 83%, 1 honorable failure
         # Stages 7-8 were added after the original 1-6 gauntlet.
-        # Keep minimum requirements simple: these stages should not be empty.
-        Stage.LANGUAGE_COVERAGE: (1, 1, 1.0, 0),
-        Stage.ADVANCED_TAINT: (1, 1, 1.0, 0),
+        Stage.LANGUAGE_COVERAGE: (4, 4, 1.0, 0),    # 100%, 4 language tests
+        Stage.ADVANCED_TAINT: (4, 4, 1.0, 0),       # 100%, 4 taint analysis tests
+        # Stage 9: Anti-Hallucination - tests for catching AI/LLM hallucinations
+        Stage.ANTI_HALLUCINATION: (6, 7, 0.86, 1),  # 86%, 7 obstacles
+        # Stage 10: Vibe Coding Adversarial - tests for AI-generated code pitfalls
+        Stage.VIBE_CODING_ADVERSARIAL: (12, 14, 0.86, 2),  # 86%, 14 obstacles
     }
 
     # Certification levels
@@ -199,7 +204,13 @@ class TortureTestHarness:
         "silver": [Stage.QUALIFYING_ROUND, Stage.DYNAMIC_LABYRINTH, Stage.BOUNDARY_CROSSING],
         "gold": [Stage.QUALIFYING_ROUND, Stage.DYNAMIC_LABYRINTH, Stage.BOUNDARY_CROSSING,
                  Stage.CONFIDENCE_CRISIS, Stage.POLICY_FORTRESS],
-        "ninja_warrior": list(Stage),
+        "platinum": [Stage.QUALIFYING_ROUND, Stage.DYNAMIC_LABYRINTH, Stage.BOUNDARY_CROSSING,
+                    Stage.CONFIDENCE_CRISIS, Stage.POLICY_FORTRESS, Stage.MOUNT_MIDORIYAMA,
+                    Stage.LANGUAGE_COVERAGE],
+        "diamond": [Stage.QUALIFYING_ROUND, Stage.DYNAMIC_LABYRINTH, Stage.BOUNDARY_CROSSING,
+                   Stage.CONFIDENCE_CRISIS, Stage.POLICY_FORTRESS, Stage.MOUNT_MIDORIYAMA,
+                   Stage.LANGUAGE_COVERAGE, Stage.ADVANCED_TAINT],
+        "ninja_warrior": list(Stage),  # All stages including 9 and 10
     }
 
     # Coverage targets
@@ -259,6 +270,12 @@ class TortureTestHarness:
             ],
             Stage.ADVANCED_TAINT: [
                  "workflow-deep-security/stage8-advanced-taint"
+            ],
+            Stage.ANTI_HALLUCINATION: [
+                "torture-tests/stage9-anti-hallucination"
+            ],
+            Stage.VIBE_CODING_ADVERSARIAL: [
+                "torture-tests/stage10-vibe-coding-adversarial"
             ],
         }
 
@@ -535,9 +552,9 @@ def main():
     )
     parser.add_argument(
         "--stage",
-        choices=["all", "1", "2", "3", "4", "5", "6", "7", "8"],
+        choices=["all", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         default="all",
-        help="Stage to run (1-8 or 'all')"
+        help="Stage to run (1-10 or 'all')"
     )
     parser.add_argument(
         "--generate-evidence",
